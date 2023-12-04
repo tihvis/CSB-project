@@ -1,0 +1,2 @@
+CREATE TABLE users (id SERIAL PRIMARY KEY, first_name TEXT, username TEXT, password TEXT, is_admin BOOLEAN);
+CREATE TABLE secure_users (id SERIAL PRIMARY KEY, first_name TEXT, username TEXT, password TEXT, is_admin BOOLEAN);

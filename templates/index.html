@@ -1,0 +1,39 @@
+<!doctype html>
+<title>CSB Messages</title>
+<body>
+<h2>Welcome to CSB Messages</h2>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+      <h3>{{ message }}</h3>
+    {% endfor %}
+   {% endif %}
+{% endwith %}
+<p>
+    {% if session.username %}
+    <p>You are signed in as {{ session.username }}</p>
+    <a href="/logout">Logout</a>
+    {% else %}
+
+<p>If you don't yet have an account, you can register below. If you already have registered, please login using the login form.</p>
+
+<form action="/register" method="POST">
+    <p>First name:<br>
+    <input type="text" name="first_name"></p>
+    <p>Username:<br>
+    <input type="text" name="username"></p>
+    <p>Password:<br>
+    <input type="password" name="password"></p>
+    <input type="submit" value="Register">
+</form>
+<p>
+<p>
+<form action="/login" method="POST">
+    <p>Username:<br>
+    <input type="text" name="username"></p>
+    <p>Password:<br>
+    <input type="password" name="password"></p>
+    <input type="submit" value="Login">
+    </form>
+    {% endif %}
+</body>
