@@ -2,24 +2,32 @@
 <title>CSB Messages</title>
 <body>
 <h2>Welcome to CSB Messages</h2>
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    {% for message in messages %}
-      <h3>{{ message }}</h3>
+{% with flashes = get_flashed_messages() %}
+  {% if flashes %}
+    {% for flash in flashes %}
+      <h3>{{ flash }}</h3>
     {% endfor %}
    {% endif %}
 {% endwith %}
 <p>
     {% if session.username %}
-    <p>You are signed in as {{ session.username }}</p>
+    <p>You are logged in as <i>{{ session.username }}</i></p>
+    <a href="/change_username">Change username</a>
+    <a href="/new_message">Post new message</a>
     <a href="/logout">Logout</a>
+    {% for message in messages %}
+<i>Message:</i> {{ message[0] }}
+<p>
+<i>Username:</i> {{ message[1] }}
+<p>
+<i>Time:</i> {{ message[2].strftime("%Y-%m-%d %H:%M:%S") }}
+<hr>
+{% endfor %}
     {% else %}
 
 <p>If you don't yet have an account, you can register below. If you already have registered, please login using the login form.</p>
 
 <form action="/register" method="POST">
-    <p>First name:<br>
-    <input type="text" name="first_name"></p>
     <p>Username:<br>
     <input type="text" name="username"></p>
     <p>Password:<br>

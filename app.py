@@ -1,6 +1,7 @@
+from os import getenv
 from flask import Flask
-from flask import flash, request, render_template, redirect, session
 
 app = Flask(__name__)
+app.secret_key = getenv("SECRET_KEY")
 
 import routes
