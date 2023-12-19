@@ -1,0 +1,18 @@
+<!doctype html>
+<title>CSB Messages - Delete message</title>
+<body>
+<h2>Delete message </h2>
+<br>
+<p>Hi admin, you can delete messages by ticking the box of the message you would like to delete and press "Delete messages".</p>
+
+<form action="/delete_message" method="POST">
+{% for message in messages %}
+<p><i>Message:</i> {{ message.message }}</p>
+<p><i>Username:</i> {{ message.username }}</p>
+<p><i>Time:</i> {{ message.sent_at.strftime("%Y-%m-%d %H:%M:%S") }}</p>
+<input type="checkbox" name="message_id" value={{ message.id }}> Delete
+<hr>
+{% endfor %}
+<input type="submit" value="Delete messages">
+</form>
+</body>

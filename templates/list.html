@@ -1,8 +1,8 @@
 <!doctype html>
 <title>CSB Messages - List</title>
 {% for message in messages %}
-<p><i>Message:</i> {{ message[0] }}</p>
-<p><i>Username:</i> {{ message[1] }}</p>
-<p><i>Time:</i> {{ message[2].strftime("%Y-%m-%d %H:%M:%S") }}</p>
+<p><i>Message:</i> {{ message.message }}</p>
+<p><i>Username:</i> {{ message.username }}</p>
+<p><i>Time:</i> {{ message.sent_at.strftime("%Y-%m-%d %H:%M:%S") }}</p>
 <hr>
 {% endfor %}

@@ -21,7 +21,7 @@ def register(username, password):
     return login(username, password)
 
 def login(username, password):
-    sql = "SELECT id, password FROM users WHERE username=:username"
+    sql = "SELECT id, username, password, is_admin FROM users WHERE username=:username"
     result = db.session.execute(text(sql), {"username":username})
     user = result.fetchone()
     if not user:
@@ -32,10 +32,37 @@ def login(username, password):
             # if check_password_hash(user.password, password):
             session["user_id"] = user.id
             session["username"] = user.username
+            session["admin"] = user.is_admin
             return True
+        
+def logout():
+    del session["user_id"]
+    del session["username"]
+    del session["admin"]
+    return True
 
 def user_id():
     return session.get("user_id")
+
+def is_logged_in():
+    if user_id() is None:
+        return False
+    else:
+        return True
+    
+def is_admin():
+    if session["admin"]:
+        return True
+    else:
+        return False
+    
+def username_in_use(username):
+    sql = "SELECT id, username FROM users WHERE username=:username"
+    result = db.session.execute(text(sql), {"username":username})
+    user = result.fetchone()
+    if user:
+        return True
+    return False
 
 def update_username(new_username):
     user_id_value = user_id()

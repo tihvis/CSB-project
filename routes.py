@@ -1,6 +1,6 @@
 from flask import flash, request, render_template, redirect, session
 from app import app
-import users
+import user
 import messages
 
 @app.route("/")
@@ -15,7 +15,9 @@ def register():
         return render_template("error.html", message="Username must be 4-40 characters long.")
     if not 7 < len(password) < 41:
         return render_template("error.html", message="Password must be 8-40 characters long.")
-    if users.register(username, password):
+    if user.username_in_use(username):
+        return render_template("error.html", message="The username you chose is already in use, please choose another one.")
+    if user.register(username, password):
         flash("Thank you for registering, you are now logged in and can start messaging.")
         return redirect("/")
     else:
@@ -26,33 +28,44 @@ def register():
 def login():
     username = request.form["username"]
     password = request.form["password"]
-    if not users.login(username, password):
+    if not user.login(username, password):
         return render_template("error.html", message="No matches with the given username and password, please try again.")
     session["username"] = username
     return redirect("/")
 
-@app.route("/change_username")
-def change_username():
-    return render_template("change_username.html")
-
-@app.route("/update_username", methods=["POST"])
+@app.route("/update_username", methods=["GET", "POST"])
 def update_username():
-    new_username = request.form["new_username"]
-    if users.update_username(new_username):
-        flash("Your username has now been changed.")
-        return redirect("/")
-    else:
-        return render_template("error.html", message="We couldn't update your information, please try again.")
+    if request.method == "GET":
+        if user.is_logged_in():
+            return render_template("update_username.html")
+        else:
+            return render_template("error.html", message="You do not have access to this page, please login to continue.")
+    
+    if request.method == "POST":
+        new_username = request.form["new_username"]
+        if user.username_in_use(new_username):
+            return render_template("error.html", message="The username is already in use, please choose another one.")
+        if user.update_username(new_username):
+            flash("Your username has now been changed.")
+            return redirect("/")
+        else:
+            return render_template("error.html", message="We couldn't update your information, please try again.")
 
 @app.route("/logout")
 def logout():
-    del session["username"]
-    return redirect("/")
+    if user.logout():
+        flash("You have now been logged out.")
+        return redirect("/")
+    else:
+        return render_template("error.html", message="Please try again.")
 
 @app.route("/new_message")
 def new_message():
-    return render_template("new_message.html")
-
+    if user.is_logged_in():
+        return render_template("new_message.html")
+    else:
+        return render_template("error.html", message="You do not have access to this page, please login to continue.")
+    
 @app.route("/send", methods=["POST"])
 def send():
     message = request.form["message"]
@@ -60,10 +73,41 @@ def send():
         flash("Your message has been saved!")
         return redirect("/")
     else:
-        return render_template("error.html", message="...")
+        return render_template("error.html", message="Please try again.")
     
 @app.route("/list", methods=["GET"])
 def list():
-    list = messages.list()
-    print("lista on", list)
-    return render_template("list.html", messages=list)
+    if user.is_logged_in():
+        message_list = messages.list()
+        if len(message_list) == 0:
+            return render_template("error.html", message="There are no messages to show yet.")
+        else:
+            return render_template("list.html", messages=message_list)
+    else:
+        return render_template("error.html", message="You do not have access to this page, please login to continue.")
+    
+@app.route("/delete_message", methods=["GET", "POST"])
+def delete_message():
+    if request.method == "GET":
+        message_list = messages.list()
+        if len(message_list) < 1:
+            return render_template("error.html", message="There are no messages to show yet.")
+        return render_template("delete_message.html", messages=message_list)
+    
+    if request.method == "POST":
+        #FLAW 3: Broken access control
+        #The below code does not check whether user is admin or not, and thus allows non-admin users to view the page and delete messages,
+        #if the user types in "/delete_message" after the home page url.
+
+        #The fix for this is commented below:
+        # if not user.is_admin():
+        #     return render_template("error.html", message="Only admins can delete messages.")
+        
+        messages_to_delete = request.form.getlist("message_id")
+        if len(messages_to_delete) < 1:
+            return render_template("error.html", message="It looks like you didn't choose any restaurants to delete.")
+        if messages.delete(messages_to_delete):
+            flash("The messages you chose have now been deleted.")
+            return redirect("/")
+        else:
+            return render_template("error.html", message="Please try again.")
