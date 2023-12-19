@@ -4,18 +4,20 @@ from flask import session
 from sqlalchemy.sql import text
 
 def register(username, password):
-# FLAW 1: Cryptographic Failures
     is_admin = False
     try:
-    # Wrong way, where password is saved as it is:
+    # FLAW 1: Cryptographic Failures
+    # Wrong way, where password is saved as it is and not as a hash value:
         sql = "INSERT INTO users (username, password, is_admin) VALUES (:username, :password, :is_admin)"
         db.session.execute(text(sql), {"username":username, "password":password, "is_admin":is_admin})
         db.session.commit()
+
     # Corrected version, where password is saved as a hash value:
         # hash_value = generate_password_hash(password)
         # sql = "INSERT INTO users (username, password) VALUES (:username, :password)"
         # db.session.execute(text(sql), {"username":username, "password":hash_value, "is_admin":is_admin})
         # db.session.commit()
+
     except:            
         return False
     return login(username, password)
@@ -28,8 +30,8 @@ def login(username, password):
         return False
     else:
         if password == user.password:
-            # Corrected check for hashed password
-            # if check_password_hash(user.password, password):
+        # If password is saved as hash value, the check would be as the below commented line instead of the line above.
+        # if check_password_hash(user.password, password):
             session["user_id"] = user.id
             session["username"] = user.username
             session["admin"] = user.is_admin
@@ -69,13 +71,18 @@ def update_username(new_username):
     if user_id_value is None:
         return False
     else:
-        #FLAW 2: INJECTION
-        #This allows user to type in for example "username, is_admin=True", and get admin rights.
-        db.session.execute(text("UPDATE users SET username='" + new_username + "' WHERE id=" + str(user_id_value)))
-        #Corrected version:
-        #if new_username 
-            #sql = "UPDATE users SET username=:new_username WHERE user_id=:user_id"
-            #db.session.execute(text(sql), {"username":new_username, "user_id":user_id}
-        db.session.commit()
-        session["username"] = new_username
-        return True
+        if not username_in_use(new_username):
+            #FLAW 2: INJECTION
+            #The code below allows user to type in for example: ', is_admin=TRUE --
+            #By doing this, the user turns all users in users-table to admins.
+            db.session.execute(text("UPDATE users SET username='" + new_username + "' WHERE id=" + str(user_id_value)))
+            db.session.commit()
+            session["username"] = new_username
+            return True
+        
+        #Corrected version without risk of injection:
+            # sql = "UPDATE users SET username=:new_username WHERE user_id=:user_id"
+            # db.session.execute(text(sql), {"username":new_username, "user_id":user_id})
+            # db.session.commit()
+            # session["username"] = new_username
+            # return True

@@ -28,10 +28,10 @@ def register():
 def login():
     username = request.form["username"]
     password = request.form["password"]
-    if not user.login(username, password):
+    if user.login(username, password):
+        return redirect("/")
+    else:
         return render_template("error.html", message="No matches with the given username and password, please try again.")
-    session["username"] = username
-    return redirect("/")
 
 @app.route("/update_username", methods=["GET", "POST"])
 def update_username():
@@ -102,7 +102,7 @@ def delete_message():
         #The fix for this is commented below:
         # if not user.is_admin():
         #     return render_template("error.html", message="Only admins can delete messages.")
-        
+
         messages_to_delete = request.form.getlist("message_id")
         if len(messages_to_delete) < 1:
             return render_template("error.html", message="It looks like you didn't choose any restaurants to delete.")
