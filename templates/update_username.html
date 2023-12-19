@@ -7,5 +7,6 @@
 <textarea name="new_username" rows="1" cols="40"></textarea>
 <br>
 <input type="submit" value="Send">
+<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
 </body>

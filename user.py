@@ -1,12 +1,13 @@
 from werkzeug.security import check_password_hash, generate_password_hash
 from db import db
 from flask import session
+import secrets
 from sqlalchemy.sql import text
 
 def register(username, password):
     is_admin = False
     try:
-    # FLAW 1: Cryptographic Failures
+    # FLAW 3: Cryptographic Failures
     # Wrong way, where password is saved as it is and not as a hash value:
         sql = "INSERT INTO users (username, password, is_admin) VALUES (:username, :password, :is_admin)"
         db.session.execute(text(sql), {"username":username, "password":password, "is_admin":is_admin})
@@ -35,6 +36,7 @@ def login(username, password):
             session["user_id"] = user.id
             session["username"] = user.username
             session["admin"] = user.is_admin
+            session["csrf_token"] = secrets.token_hex(16)
             return True
         
 def logout():
@@ -72,7 +74,7 @@ def update_username(new_username):
         return False
     else:
         if not username_in_use(new_username):
-            #FLAW 2: INJECTION
+            #FLAW 4: INJECTION
             #The code below allows user to type in for example: ', is_admin=TRUE --
             #By doing this, the user turns all users in users-table to admins.
             db.session.execute(text("UPDATE users SET username='" + new_username + "' WHERE id=" + str(user_id_value)))

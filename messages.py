@@ -3,7 +3,7 @@ import user
 from sqlalchemy.sql import text
 import datetime 
 
-def send(message):
+def save_message(message):
     user_id = user.user_id()
     if user_id is None:
         return False
