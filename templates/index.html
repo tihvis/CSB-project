@@ -10,10 +10,11 @@
    {% endif %}
 {% endwith %}
 <p>
-    {% if session.username %}
+    {% if session.user_id %}
     <p>You are logged in as <i>{{ session.username }}</i></p>
-    <a href="/change_username">Change username</a>
+    <a href="/change_username">Update username</a>
     <a href="/new_message">Post new message</a>
+    <a href="/list">List all messages</a>
     <a href="/logout">Logout</a>
     {% for message in messages %}
 <i>Message:</i> {{ message[0] }}

@@ -5,8 +5,7 @@ import messages
 
 @app.route("/")
 def index():
-    list = messages.list()
-    return render_template("index.html", messages=list)
+    return render_template("index.html")
 
 @app.route("/register", methods=["POST"])
 def register():
@@ -33,14 +32,13 @@ def login():
     return redirect("/")
 
 @app.route("/change_username")
-def change_name():
+def change_username():
     return render_template("change_username.html")
 
-@app.route("/update", methods=["POST"])
-def update():
-    username = session["username"]
+@app.route("/update_username", methods=["POST"])
+def update_username():
     new_username = request.form["new_username"]
-    if users.update(username, new_username):
+    if users.update_username(new_username):
         flash("Your username has now been changed.")
         return redirect("/")
     else:
@@ -63,3 +61,9 @@ def send():
         return redirect("/")
     else:
         return render_template("error.html", message="...")
+    
+@app.route("/list", methods=["GET"])
+def list():
+    list = messages.list()
+    print("lista on", list)
+    return render_template("list.html", messages=list)

@@ -16,7 +16,7 @@ def register(username, password):
         # sql = "INSERT INTO users (username, password) VALUES (:username, :password)"
         # db.session.execute(text(sql), {"username":username, "password":hash_value, "is_admin":is_admin})
         # db.session.commit()
-    except:
+    except:            
         return False
     return login(username, password)
 
@@ -30,23 +30,25 @@ def login(username, password):
         if password == user.password:
             # Corrected check for hashed password
             # if check_password_hash(user.password, password):
-            session["username"] = username
+            session["user_id"] = user.id
+            session["username"] = user.username
             return True
-        else:
-            return False
-            
-def username():
-    return session.get("username", "")
 
-def update(username, new_username):
-    sql = "SELECT id FROM users WHERE username=:username"
-    result = db.session.execute(text(sql), {"username":str(username)})
-    user_id = result.fetchone()[0]
-    if not user_id:
+def user_id():
+    return session.get("user_id")
+
+def update_username(new_username):
+    user_id_value = user_id()
+    if user_id_value is None:
         return False
     else:
-        sql = f"UPDATE users SET username='{str(new_username)}' WHERE id={user_id}"
-        db.session.execute(text(sql))
+        #FLAW 2: INJECTION
+        #This allows user to type in for example "username, is_admin=True", and get admin rights.
+        db.session.execute(text("UPDATE users SET username='" + new_username + "' WHERE id=" + str(user_id_value)))
+        #Corrected version:
+        #if new_username 
+            #sql = "UPDATE users SET username=:new_username WHERE user_id=:user_id"
+            #db.session.execute(text(sql), {"username":new_username, "user_id":user_id}
         db.session.commit()
         session["username"] = new_username
         return True
