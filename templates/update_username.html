@@ -1,6 +1,9 @@
-<!doctype html>
-<title>CSB Messages - Update username</title>
-<body>
+<head>
+    <title>CSB Messages - Update username</title>
+  </head>
+  {% extends "layout.html" %}
+  {% block content %}
+  <div class="container">
 <h2>Update username </h2>
 <form action="/update_username" method="POST">
 <p>Update your username to: <br>
@@ -9,4 +12,5 @@
 <input type="submit" value="Send">
 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
-</body>
+</div>
+{% endblock %}

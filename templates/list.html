@@ -1,8 +1,15 @@
-<!doctype html>
-<title>CSB Messages - List</title>
+<head>
+    <title>CSB Messages - List</title>
+  </head>
+  {% extends "layout.html" %}
+  {% block content %}
+  <div class="container">
+    <h2>All messages</h2>
 {% for message in messages %}
 <p><i>Message:</i> {{ message.message }}</p>
 <p><i>Username:</i> {{ message.username }}</p>
 <p><i>Time:</i> {{ message.sent_at.strftime("%Y-%m-%d %H:%M:%S") }}</p>
 <hr>
 {% endfor %}
+</div>
+{% endblock %}

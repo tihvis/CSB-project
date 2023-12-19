@@ -1,11 +1,16 @@
-<!doctype html>
-<title>Post new message</title>
-<body>
+<head>
+    <title>CSB Messages - New message</title>
+  </head>
+  {% extends "layout.html" %}
+  {% block content %}
+  <div class="container">
 <h2>Post a new message </h2>
 <form action="/new_message" method="POST">
 <p>Message: <br>
 <textarea name="message" rows="3" cols="40"></textarea>
 <br>
 <input type="submit" value="Send">
+<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
-</body>
+</div>
+{% endblock %}

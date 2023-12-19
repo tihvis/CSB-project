@@ -1,8 +1,11 @@
-<!doctype html>
-<title>CSB Messages - Delete message</title>
-<body>
+
+<head>
+    <title>CSB Messages - Delete message</title>
+ </head>
+ {% extends "layout.html" %}
+ {% block content %}
+ <div class="container">
 <h2>Delete message </h2>
-<br>
 <p>Hi admin, you can delete messages by ticking the box of the message you would like to delete and press "Delete messages".</p>
 
 <form action="/delete_message" method="POST">
@@ -16,4 +19,5 @@
 <input type="submit" value="Delete messages">
 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
-</body>
+</div>
+{% endblock %}

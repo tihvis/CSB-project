@@ -1,7 +1,10 @@
-<!doctype html>
-<title>CSB Messages - Error</title>
-<body>
+<head>
+    <title>CSB Messages - Error</title>
+ </head>
+ {% extends "layout.html" %}
+ {% block content %}
+ <div class="container">
 <h2>Whoops, something went wrong...</h2>
 <p>{{ message }}</p>
-<a href="/">Front page</a>
-</body>
+</div>
+{% endblock %}
