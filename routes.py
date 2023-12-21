@@ -62,16 +62,20 @@ def logout():
     else:
         return render_template("error.html", message="Please try again.")
 
-@app.route("/new_message", methods=["GET", "POST"])
-def new_message():
+@app.route("/chat", methods=["GET", "POST"])
+def chat():
     if request.method == "GET":
         if user.is_logged_in():
-            return render_template("new_message.html")
+            message_list = messages.list()
+            if len(message_list) == 0:
+                return render_template("error.html", message="There are no messages to show yet.")
+            else:
+                return render_template("chat.html", messages=message_list)
         else:
             return render_template("error.html", message="You do not have access to this page, please login to continue.")
-        
+
     if request.method == "POST":
-        #FLAW 1: Missing CSRF-protection
+        # FLAW 1: Missing CSRF-protection
         # This method is not checking whether the session related csrf_token is valid.
 
         # CSRF-check added below as comments. The html-form related to this already has the CSRF-token as a hidden input.
@@ -80,23 +84,13 @@ def new_message():
 
         message = request.form["message"]
         if messages.save_message(message):
-            flash("Your message has been saved!")
-            return redirect("/")
+            flash("Thanks for your input!")
+            return redirect("/chat")
         else:
             return render_template("error.html", message="Please try again.")
+
     
-@app.route("/list", methods=["GET"])
-def list():
-    if user.is_logged_in():
-        message_list = messages.list()
-        if len(message_list) == 0:
-            return render_template("error.html", message="There are no messages to show yet.")
-        else:
-            return render_template("list.html", messages=message_list)
-    else:
-        return render_template("error.html", message="You do not have access to this page, please login to continue.")
-    
-@app.route("/delete_message", methods=["GET", "POST"])
+@app.route("/admin", methods=["GET", "POST"])
 def delete_message():
     if request.method == "GET":
         message_list = messages.list()
@@ -108,7 +102,7 @@ def delete_message():
         # FLAW 2: Broken access control
         # The below code does not check whether user is admin or not, and thus allows non-admin users
         # and even non-logged in users to view the page and delete messages,
-        # if the user types in "/delete_message" after the home page url.
+        # if the user types in "/admin" after the home page url.
 
         # The fix for this is commented below:
         # if not user.is_admin():

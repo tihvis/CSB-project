@@ -1,6 +1,6 @@
 
 <head>
-    <title>CSB Messages - Delete message</title>
+    <title>CSB Chat - Admin site</title>
  </head>
  {% extends "layout.html" %}
  {% block content %}
@@ -8,7 +8,7 @@
 <h2>Delete message </h2>
 <p>Hi admin, you can delete messages by ticking the box of the message you would like to delete and press "Delete messages".</p>
 
-<form action="/delete_message" method="POST">
+<form action="/admin" method="POST">
 {% for message in messages %}
 <p><i>Message:</i> {{ message.message }}</p>
 <p><i>Username:</i> {{ message.username }}</p>

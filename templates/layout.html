@@ -2,13 +2,13 @@
 <html lang="en">
    <link rel="stylesheet" href="/static/main.css">
    <meta name="viewport" content="width=device-width initial-scale=1.0">
-   <h1 style="text-align:center; margin-top: 20px;">CSB Messages</h1>
+   <h1 style="text-align:center; margin-top: 20px;">CSB Chat</h1>
    <hr>
    <p>
       <body>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
-        <ul class=flashes>
+        <ul class="flashes">
             {% for message in messages %}
             <i><b>{{ message }}</b></i>
             {% endfor %}
@@ -17,13 +17,13 @@
             {% endwith %}
             {% block content %}{% endblock %}
             {% if session.user_id %}
-            <p>You are logged in as <i>{{ session.username }}</i></p>
+            <p>You are logged in as <b>{{ session.username }}</b></p>
             {% endif %}
             <p>
     <div class="button-group">
         <a href="/">Front page</a>
         {% if session.admin %}
-        <a href="/delete_message">Delete message (admin page)</a>
+        <a href="/admin">Admin page</a>
         {% endif %}
         {% if session.username %}
         <a href="/logout">Logout</a>

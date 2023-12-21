@@ -1,0 +1,30 @@
+<head>
+    <title>CSB Chat - List</title>
+  </head>
+  {% extends "layout.html" %}
+  {% block content %}
+  <div class="container">
+    <h2>All messages</h2>
+    <div class="message-container">
+      <br>
+{% for message in messages %}
+<div class="message">
+<p><span class="bigger-text">{{ message.message }}</span></p>
+<p><i>- {{ message.username }}</i></p>
+<p><i>Sent: {{ message.sent_at.strftime("%d.%m.%Y %H:%M") }}</i></p>
+</div>
+<br>
+<p>
+{% endfor %}
+</div>
+<hr>
+<h2>Join the conversation!</h2>
+<form action="/chat" method="POST">
+<p>Message: <br>
+<textarea name="message" rows="3" cols="40"></textarea>
+<br>
+<input type="submit" value="Send">
+<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+</form>
+</div>
+{% endblock %}

@@ -14,6 +14,44 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
+.message-container {
+    text-align: center;
+}
+
+.message {
+    background: #f5e4d7;
+    color: #333;
+    font-size: 14px;
+    line-height: 4em;
+    margin-bottom: 1em;
+    border-radius: .4em;
+    padding: 0 1em;
+    position: relative;
+    text-align: center;
+    vertical-align: top;
+    display: inline-block;
+  }
+
+  .message:after {
+      border: 1em solid transparent;
+      border-top-color: #f5e4d7;
+      content: "";
+      margin-left: -1em;
+      position: absolute;
+          top: 100%;
+          left: 50%;
+      width: 0;
+      height: 0;
+  }
+
+  .bigger-text {
+    font-size: 1.2em;
+  }
+
+  .smaller-text {
+    font-size: 0.8em;
+  }
+
 h1 {
     color: #82977e; 
     font-family: 'Copperplate', sans-serif;
@@ -21,19 +59,19 @@ h1 {
 }
 
 h2 {
-    color: #82977e;
+    color: #334;
     font-family: 'Copperplate', sans-serif;
     text-align: center;
 }
 
 h3 {
-    color: #82977e;
+    color: #334;
     font-family: 'Copperplate', sans-serif;
     text-align: center;
 }
 
 p {
-    color: black;
+    color: #334;
     line-height: 1.6;
     text-align: center;
     font-family: 'Times New Roman', serif;
@@ -41,13 +79,13 @@ p {
 
 hr {
     border: none;
-    border-top: 2px solid #a4ab9c;
+    border-top: 2px solid #334;a4ab9c
     margin-top: 20px;
 }
 
 a:link, a:visited {
     background-color: #a4ab9c;
-    color: black;
+    color: #334;
     padding: 10px 15px;
     text-align: center;
     text-decoration: none;
@@ -60,17 +98,17 @@ a:link, a:visited {
 
   ul.flashes {
     text-align: center;
-    color: black;
+    color: #334;
     font-family: 'Copperplate', sans-serif;
-    font-size: 20px;
+    font-size: 18px;
     margin-bottom: 10px;
     list-style: none;
     padding: 20px;
   }
 
   form {
-    margin-top: 50px;
-    margin-bottom: 50px;
+    margin-top: 40px;
+    margin-bottom: 40px;
     text-align: center;
 }
 
@@ -86,7 +124,7 @@ form .login-button, form .register-button {
 
   input[type="submit"] {
     background-color: #a4ab9c;
-    color: black;
+    color: #334;
     padding: 10px 15px;
     border: none; 
     border-radius: 3px;

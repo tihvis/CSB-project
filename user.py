@@ -74,15 +74,15 @@ def update_username(new_username):
         return False
     else:
         if not username_in_use(new_username):
-            #FLAW 4: INJECTION
-            #The code below allows user to type in for example: ', is_admin=TRUE --
-            #By doing this, the user turns all users in users-table to admins.
+            # FLAW 4: INJECTION
+            # The code below allows user to type in for example: ', is_admin=TRUE --
+            # By doing this, the user turns all users in users-table to admins.
             db.session.execute(text("UPDATE users SET username='" + new_username + "' WHERE id=" + str(user_id_value)))
             db.session.commit()
             session["username"] = new_username
             return True
         
-        #Corrected version without risk of injection:
+        # Corrected version without risk of injection:
             # sql = "UPDATE users SET username=:new_username WHERE user_id=:user_id"
             # db.session.execute(text(sql), {"username":new_username, "user_id":user_id})
             # db.session.commit()

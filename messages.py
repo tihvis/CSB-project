@@ -19,11 +19,8 @@ def list():
     return result.fetchall()
 
 def delete(messages_to_delete):
-    print("messages_to_delete on", messages_to_delete)
     try:
         for id in messages_to_delete:
-            #id=int(id)
-            print("seuraavana vuorossa message_id", id)
             sql = "UPDATE messages SET visibility = False WHERE id=:id"
             db.session.execute(text(sql), {"id":id})
             db.session.commit()

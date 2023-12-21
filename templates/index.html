@@ -1,23 +1,20 @@
 <head>
-  <title>CSB Messages - Home</title>
+  <title>CSB Chat - Home</title>
 </head>
 {% extends "layout.html" %}
 {% block content %}
 <div class="container">
 <h2>Welcome to CSB Messages</h2>
-<p>
+<br>
     {% if session.user_id %}
-    <p>Thanks for logging in! You can now write a message or read all written messages. You also have the chance to update your username.</p>
+    <p>What would you like to do next?</p>
     <div class="button-group">
-    <a href="/new_message">Post new message</a>
-    <a href="/list">List all messages</a>
+    <a href="/chat">Chat</a>
     <a href="/update_username">Update username</a>
     </div>
     {% else %}
 
-<p>If you don't yet have an account, you can register below. If you already have registered, please login using the login form.</p>
-
-<p>
+<p>If you already have registered, please login using the login form below.</p>
   <form action="/login" method="POST">
       <p>Username:<br>
       <input type="text" name="username"></p>
@@ -27,10 +24,14 @@
       </form>
 <p>
 <hr>
+<br>
+<p>If you don't yet have an account, you can register below.</p>
 <form action="/register" method="POST">
-    <p>Username:<br>
+    <p>Username:</p>
+    <p><span class="smaller-text">4 - 40 characters long</span><br>
     <input type="text" name="username"></p>
-    <p>Password:<br>
+    <p>Password:</p>
+    <p><span class="smaller-text">8 - 40 characters long and must include atleast one number and one capital letter</span><br>
     <input type="password" name="password"></p>
     <input type="submit" value="Register">
 </form>
