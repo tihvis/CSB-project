@@ -92,6 +92,15 @@ def chat():
     
 @app.route("/admin", methods=["GET", "POST"])
 def delete_message():
+    # FLAW 2: Broken access control
+    # The below code does not check whether user is admin or not, and thus allows non-admin users
+    # and even non-logged in users to view the page and delete messages,
+    # if the user types in "/admin" after the home page url.
+
+    # The fix for this is commented below:
+    # if not user.is_admin():
+    #     return render_template("error.html", message="Only admins can delete messages.")
+
     if request.method == "GET":
         message_list = messages.list()
         if len(message_list) < 1:
@@ -99,15 +108,6 @@ def delete_message():
         return render_template("delete_message.html", messages=message_list)
     
     if request.method == "POST":
-        # FLAW 2: Broken access control
-        # The below code does not check whether user is admin or not, and thus allows non-admin users
-        # and even non-logged in users to view the page and delete messages,
-        # if the user types in "/admin" after the home page url.
-
-        # The fix for this is commented below:
-        # if not user.is_admin():
-        #     return render_template("error.html", message="Only admins can delete messages.")
-
         messages_to_delete = request.form.getlist("message_id")
         if len(messages_to_delete) < 1:
             return render_template("error.html", message="It looks like you didn't choose any restaurants to delete.")
