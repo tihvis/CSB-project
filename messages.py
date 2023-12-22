@@ -7,6 +7,8 @@ def save_message(message):
     user_id = user.user_id()
     if user_id is None:
         return False
+    if not 1 <= len(message) <= 1000:
+        return False
     visibility = True
     sql = "INSERT INTO messages (message, user_id, sent_at, visibility) VALUES (:message, :user_id, NOW(), :visibility)"
     db.session.execute(text(sql), {"message":message, "user_id":user_id, "visibility":visibility})

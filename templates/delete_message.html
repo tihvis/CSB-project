@@ -7,15 +7,20 @@
  <div class="container">
 <h2>Delete message </h2>
 <p>Hi admin, you can delete messages by ticking the box of the message you would like to delete and press "Delete messages".</p>
-
+<div class="message-container">
 <form action="/admin" method="POST">
-{% for message in messages %}
-<p><i>Message:</i> {{ message.message }}</p>
-<p><i>Username:</i> {{ message.username }}</p>
-<p><i>Time:</i> {{ message.sent_at.strftime("%Y-%m-%d %H:%M:%S") }}</p>
+    {% for message in messages %}
+    <div class="message">
+        <p><span class="bigger-text">{{ message.message }}</span></p>
+        <p><i>- {{ message.username }}</i></p>
+        <p><i>Sent: {{ message.sent_at.strftime("%d.%m.%Y %H:%M") }}</i></p>
+        </div>
+        <p>
 <input type="checkbox" name="message_id" value={{ message.id }}> Delete
-<hr>
+<br>
 {% endfor %}
+</div>
+<p>
 <input type="submit" value="Delete messages">
 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>

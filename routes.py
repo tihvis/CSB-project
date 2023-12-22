@@ -68,9 +68,8 @@ def chat():
         if user.is_logged_in():
             message_list = messages.list()
             if len(message_list) == 0:
-                return render_template("error.html", message="There are no messages to show yet.")
-            else:
-                return render_template("chat.html", messages=message_list)
+                flash("No messages yet, be brave and send the first message!")
+            return render_template("chat.html", messages=message_list)
         else:
             return render_template("error.html", message="You do not have access to this page, please login to continue.")
 
